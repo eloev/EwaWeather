@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/Dmitry/AndroidStudioProjects/EwaWeather/app/src/main/res/drawable/dr_day.xml" value="0.22135416666666666" />
+        <entry key="..\:/Users/Dmitry/AndroidStudioProjects/EwaWeather/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Users/Dmitry/AndroidStudioProjects/EwaWeather/app/src/main/res/layout/fragment_weather_next_day.xml" value="0.19791666666666666" />
+        <entry key="..\:/Users/Dmitry/AndroidStudioProjects/EwaWeather/app/src/main/res/layout/fragment_weather_now.xml" value="0.176" />
+        <entry key="..\:/Users/Dmitry/AndroidStudioProjects/EwaWeather/app/src/main/res/layout/item_nextdays.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/Dmitry/AndroidStudioProjects/EwaWeather/app/src/main/res/layout/weather_now_fragment.xml" value="0.2726449275362319" />
+        <entry key="..\:/Users/Dmitry/AndroidStudioProjects/EwaWeather/app/src/main/res/menu/host_fragment.xml" value="0.1" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">EwaWeather</string>
+    <string name="pressure">Давление</string>
+    <string name="humility">Влажность</string>
+    <string name="no_internet">Нет интернет соединения \n Загружены старые данные</string>
+    <string name="image_day">изображение</string>
+    <string name="morning">Утро</string>
+    <string name="day">День</string>
+    <string name="evening">Вечер</string>
+    <string name="night">Ночь</string>
+</resources>

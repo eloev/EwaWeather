@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">EwaWeather</string>
+    <string name="pressure">Pressure</string>
+    <string name="humility">Humility</string>
+    <string name="no_internet">No internet connection \n Loaded old data</string>
+    <string name="image_day">image day</string>
+    <string name="morning">Morning</string>
+    <string name="day">Day</string>
+    <string name="evening">Evening</string>
+    <string name="night">Night</string>
+</resources>

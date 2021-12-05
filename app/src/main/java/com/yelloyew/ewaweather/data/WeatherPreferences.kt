@@ -5,8 +5,6 @@ import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import com.yelloyew.ewaweather.domain.model.Weather
 import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
-import it.czerwinski.android.hilt.annotations.BoundTo
 import java.lang.StringBuilder
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter.ISO_DATE_TIME
@@ -15,12 +13,11 @@ import javax.inject.Inject
 private const val PREF_LAST_WEATHER = "lastWeather"
 private const val PREF_LAST_FORECAST_UPDATE = "lastForecastUpdate"
 
-@BoundTo(supertype = WeatherPrefs::class, component = SingletonComponent::class)
 class WeatherPreferences @Inject constructor(
     @ApplicationContext private val context: Context
-) : WeatherPrefs {
+) {
 
-    override suspend fun getLastWeather(): Weather? {
+    fun getLastWeather(): Weather? {
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
         val item = prefs.getString(PREF_LAST_WEATHER, "")!!
         if (item.isNotBlank()){
@@ -41,7 +38,7 @@ class WeatherPreferences @Inject constructor(
         return null
     }
 
-    override suspend fun setLastWeather(weather: Weather) {
+    fun setLastWeather(weather: Weather) {
         val output = StringBuilder()
         with(weather) {
             output.append("$city,")
@@ -54,7 +51,7 @@ class WeatherPreferences @Inject constructor(
             .edit { putString(PREF_LAST_WEATHER, output.toString()) }
     }
 
-    override suspend fun getForecastUpdateTime(): LocalDateTime? {
+     fun getForecastUpdateTime(): LocalDateTime? {
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
         val item = prefs.getString(PREF_LAST_FORECAST_UPDATE, "")!!
         return if (item.isNotBlank()){
@@ -64,7 +61,7 @@ class WeatherPreferences @Inject constructor(
         }
     }
 
-    override suspend fun setForecastUpdateTime() {
+    fun setForecastUpdateTime() {
         val output = LocalDateTime.now().format(ISO_DATE_TIME)
         PreferenceManager.getDefaultSharedPreferences(context)
             .edit { putString(PREF_LAST_FORECAST_UPDATE, output.toString()) }

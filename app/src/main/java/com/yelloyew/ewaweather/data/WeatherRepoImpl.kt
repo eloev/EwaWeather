@@ -23,7 +23,7 @@ private const val TAG = "tag10 WeatherRepoImpl"
 class WeatherRepoImpl @Inject constructor(
     private val weatherService: WeatherService,
     private val forecastService: ForecastService,
-    private val weatherPrefs: WeatherPrefs,
+    private val weatherPrefs: WeatherPreferences,
     private val forecastRepository: ForecastRepository
 ) : WeatherRepo {
 

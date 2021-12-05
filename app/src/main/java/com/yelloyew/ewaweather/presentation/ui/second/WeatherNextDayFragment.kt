@@ -1,4 +1,4 @@
-package com.yelloyew.ewaweather.presentation.ui
+package com.yelloyew.ewaweather.presentation.ui.second
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,9 +8,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yelloyew.ewaweather.databinding.FragmentWeatherNextDayBinding
-import com.yelloyew.ewaweather.presentation.adapter.WeatherNextDaysRecycler
-import com.yelloyew.ewaweather.presentation.viewmodel.SecondViewModel
+import com.yelloyew.ewaweather.presentation.ui.MainActivity
+import com.yelloyew.ewaweather.presentation.ui.second.adapter.WeatherNextDaysRecycler
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class WeatherNextDayFragment : Fragment() {
 
     private var _binding: FragmentWeatherNextDayBinding? = null
@@ -26,7 +28,7 @@ class WeatherNextDayFragment : Fragment() {
     ): View {
         _binding = FragmentWeatherNextDayBinding.inflate(inflater, container, false)
 
-        binding.apply {
+        with(binding) {
             recyclerView.layoutManager = LinearLayoutManager(context)
             recyclerView.adapter = adapter
 
@@ -45,7 +47,6 @@ class WeatherNextDayFragment : Fragment() {
                 binding.refresh.isRefreshing = false
             }
         )
-
         return binding.root
     }
 

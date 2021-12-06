@@ -1,7 +1,6 @@
 package com.yelloyew.ewaweather.data.network
 
 import com.yelloyew.ewaweather.data.network.model.YandexWeather
-import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Headers

@@ -1,9 +1,12 @@
-package com.yelloyew.ewaweather.domain.model
+package com.yelloyew.ewaweather.data.database.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import java.time.LocalDate
 
-data class Forecast(
-    val date: LocalDate,
+@Entity
+data class ForecastRoom(
+    @PrimaryKey val date: LocalDate,
     val morning_temp: Int,
     val morning_cloud: Float,
     val morning_humidity: Int,

@@ -5,7 +5,7 @@ import com.yelloyew.ewaweather.domain.model.Weather
 
 interface WeatherRepo {
 
-    suspend fun getWeather() : Weather?
+    suspend fun getNetworkWeather() : Weather?
 
-    suspend fun getForecast() : MutableList<Forecast>
+    suspend fun getNetworkForecast() : MutableList<Forecast>
 }

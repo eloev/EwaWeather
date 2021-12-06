@@ -1,15 +1,15 @@
 package com.yelloyew.ewaweather.data.database
 
-import com.yelloyew.ewaweather.domain.model.Forecast
+import com.yelloyew.ewaweather.data.database.model.ForecastRoom
 import java.time.LocalDate
 
 interface ForecastRepository {
 
-    suspend fun getForecasts() : MutableList<Forecast>
+    suspend fun getForecasts() : List<ForecastRoom>
 
-    suspend fun addForecast(forecast: Forecast)
+    suspend fun addForecast(forecast: ForecastRoom)
 
     suspend fun deleteForecast(date: LocalDate)
 
-    suspend fun updateForecast(forecast: Forecast)
+    suspend fun updateForecast(forecast: ForecastRoom)
 }

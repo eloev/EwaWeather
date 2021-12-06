@@ -9,9 +9,9 @@ import com.yelloyew.ewaweather.databinding.ItemNextdaysBinding
 import java.time.format.DateTimeFormatter
 
 class WeatherNextDaysRecycler : RecyclerView.Adapter<WeatherNextDaysRecycler.ViewHolder>() {
-    private var forecasts: MutableList<Forecast> = mutableListOf()
+    private var forecasts: List<Forecast> = mutableListOf()
 
-    fun setData(newWeather: MutableList<Forecast>) {
+    fun setData(newWeather: List<Forecast>) {
         forecasts = newWeather
         notifyDataSetChanged()
     }

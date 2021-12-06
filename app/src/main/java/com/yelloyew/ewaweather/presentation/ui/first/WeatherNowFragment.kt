@@ -14,7 +14,6 @@ import com.yelloyew.ewaweather.R
 import com.yelloyew.ewaweather.domain.model.Weather
 import com.yelloyew.ewaweather.presentation.ui.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.format.DateTimeFormatter
 
@@ -38,13 +37,13 @@ class WeatherNowFragment : Fragment() {
         with(binding) {
             linearRoot.setOnClickListener {
                 lifecycleScope.launch {
-                    if (viewModel.getForecastScreen()){
+                    if (viewModel.canOpenForecast()){
                         val action =
                             WeatherNowFragmentDirections.actionWeatherNowFragmentToWeatherNextDayFragment()
                         findNavController().navigate(action)
                     }
                     else {
-                        Toast.makeText(context, R.string.app_name, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, R.string.no_internet, Toast.LENGTH_SHORT).show()
                     }
                 }
             }

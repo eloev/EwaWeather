@@ -24,14 +24,14 @@ class WeatherPreferences @Inject constructor(
             val items = item.split(",")
             // имеет такой вид и в таком же порядке собирается
             // Москва,-2.35,947.0,91.0,30-11-2021 19:31
-            // name=Москва, temp=-2.35, pressure=974.0, humidity=91.0, date=30-11-2021 19:31
+            // city=Москва, temp=-2.35, pressure=974.0, humility=91.0, date=30-11-2021 19:31
             if (items.size == 5) {
                 return Weather(
-                    items[0],
-                    items[1],
-                    items[2],
-                    items[3],
-                    LocalDateTime.parse(items[4])
+                    city = items[0],
+                    temperature = items[1],
+                    pressure = items[2],
+                    humility = items[3],
+                    date = LocalDateTime.parse(items[4])
                 )
             }
         }

@@ -2,6 +2,7 @@ package com.yelloyew.ewaweather.data
 
 import android.util.Log
 import com.yelloyew.ewaweather.data.database.ForecastRepository
+import com.yelloyew.ewaweather.data.database.model.ForecastRoom
 import com.yelloyew.ewaweather.data.network.ForecastService
 import com.yelloyew.ewaweather.data.network.WeatherService
 import com.yelloyew.ewaweather.domain.WeatherRepo
@@ -15,6 +16,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
 import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.math.roundToInt
 
 private const val TAG = "tag10 WeatherRepoImpl"
@@ -23,30 +25,10 @@ private const val TAG = "tag10 WeatherRepoImpl"
 class WeatherRepoImpl @Inject constructor(
     private val weatherService: WeatherService,
     private val forecastService: ForecastService,
-    private val weatherPrefs: WeatherPreferences,
-    private val forecastRepository: ForecastRepository
+    private val weatherPrefs: WeatherPreferences
 ) : WeatherRepo {
 
-    override suspend fun getWeather(): Weather? {
-        var weather: Weather? = weatherPrefs.getLastWeather()
-        // open weather update data each 10 minutes
-        val currentTime: LocalDateTime = LocalDateTime.now().plusMinutes(8)
-        if (weather == null) {
-            weather = getNetworkWeather()
-            if (weather == null){
-                return null
-            }
-        } else if (currentTime <= weather.date) {
-            Log.d(TAG, "$currentTime, ${weather.date}")
-            weather = getNetworkWeather()
-        }
-        if (weather != null) {
-            weatherPrefs.setLastWeather(weather)
-        }
-        return weather
-    }
-
-    private suspend fun getNetworkWeather(): Weather? {
+    override suspend fun getNetworkWeather(): Weather? {
         try {
             val response = weatherService.weatherNow()
             return if (response.isSuccessful) {
@@ -65,44 +47,13 @@ class WeatherRepoImpl @Inject constructor(
                 Log.d(TAG, HttpException(response).toString())
                 return null
             }
-        }
-        catch (e: Exception){
+        } catch (e: Exception) {
             Log.d(TAG, e.toString())
             return null
         }
     }
 
-    override suspend fun getForecast(): MutableList<Forecast> {
-        var forecasts = forecastRepository.getForecasts()
-        val lastUpdateTime = weatherPrefs.getForecastUpdateTime()
-        val currentTime: LocalDateTime = LocalDateTime.now().plusMinutes(15)
-        if (forecasts == emptyList<Forecast>()) {
-            forecasts = getNetworkForecast()
-            if (forecasts == emptyList<Forecast>()){
-                return forecasts
-            }
-            for (i in forecasts) {
-                forecastRepository.addForecast(i)
-            }
-        } else if (currentTime <= lastUpdateTime) {
-            Log.d(TAG, "$currentTime, $lastUpdateTime")
-            val newForecast = getNetworkForecast()
-            for (i in 0 until forecasts.size) {
-                loop@ for (y in newForecast) {
-                    if (forecasts[i] == y) {
-                        break@loop
-                    } else if (i == forecasts.size - 1) {
-                        forecastRepository.deleteForecast(forecasts[i].date)
-                        forecastRepository.updateForecast(y)
-                        forecasts[i] = y
-                    }
-                }
-            }
-        }
-        return forecasts
-    }
-
-    private suspend fun getNetworkForecast(): MutableList<Forecast> {
+    override suspend fun getNetworkForecast(): MutableList<Forecast> {
         val forecasts = mutableListOf<Forecast>()
         try {
             val response = forecastService.weatherSevenDays()
@@ -140,13 +91,13 @@ class WeatherRepoImpl @Inject constructor(
                     }
                 }
                 weatherPrefs.setForecastUpdateTime()
+                Log.d(TAG, "update time for forecast")
                 return forecasts
             } else {
                 Log.d(TAG, HttpException(response).toString())
                 return forecasts
             }
-        }
-        catch (e: Exception){
+        } catch (e: Exception) {
             Log.d(TAG, e.toString())
             return forecasts
         }

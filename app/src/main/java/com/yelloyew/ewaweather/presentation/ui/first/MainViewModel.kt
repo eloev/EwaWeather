@@ -8,8 +8,11 @@ import com.yelloyew.ewaweather.domain.model.Weather
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+private const val TAG = "tag11 viewmodel"
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
@@ -23,13 +26,23 @@ class MainViewModel @Inject constructor(
         CoroutineExceptionHandler { _, throwable -> throwable.printStackTrace() }
 
     fun getWeatherNow(): MutableLiveData<Weather> {
+        var coroutineCompleted = false
         viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
-            weather.postValue(weatherManager.getWeather())
+            while (!coroutineCompleted){
+                val weatherManager = weatherManager.getWeather()
+                coroutineCompleted = if (weatherManager == null) {
+                    delay(5000L)
+                    false
+                } else {
+                    weather.postValue(weatherManager!!)
+                    true
+                }
+            }
         }
         return weather
     }
 
-    suspend fun getForecastScreen(): Boolean {
-        return weatherManager.getForecastScreen()
+    suspend fun canOpenForecast(): Boolean {
+        return weatherManager.canOpenForecast()
     }
 }

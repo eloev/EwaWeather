@@ -4,7 +4,7 @@
     android:id="@+id/refresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.ui.WeatherNowFragment">
+    tools:context=".presentation.ui.first.WeatherNowFragment">
 
     <LinearLayout
         android:id="@+id/linear_root"

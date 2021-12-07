@@ -8,6 +8,7 @@ import com.yelloyew.ewaweather.data.WeatherPreferences
 import com.yelloyew.ewaweather.data.database.ForecastRepository
 import com.yelloyew.ewaweather.data.database.model.ForecastRoom
 import com.yelloyew.ewaweather.domain.model.Forecast
+import com.yelloyew.ewaweather.domain.model.RequestParams
 import com.yelloyew.ewaweather.domain.model.Weather
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
@@ -27,16 +28,32 @@ class WeatherManager @Inject constructor(
     private val forecastRepository: ForecastRepository,
     @ApplicationContext private val context: Context
 ) {
+
+    private var stockRequestParams : RequestParams? = RequestParams(55.75, 37.61, "ru")
+
     init {
         setupWorker()
+        if (weatherPrefs.getRequestParams() != null){
+            stockRequestParams = weatherPrefs.getRequestParams()
+        }
+    }
+
+    fun setRequestParams(requestParams: RequestParams){
+        stockRequestParams = requestParams
+        weatherPrefs.setRequestParams(requestParams)
+    }
+
+    private suspend fun getRequestParams() : RequestParams?{
+        val requestParams = weatherPrefs.getRequestParams()
+        return requestParams ?: stockRequestParams
     }
 
     suspend fun getWeather(): Weather? {
         var weather: Weather? = weatherPrefs.getLastWeather()
         // api.openweathermap.org update data each 10 minutes
-        val currentTime: LocalDateTime = LocalDateTime.now().minusMinutes(8)
+        val currentTime: LocalDateTime = LocalDateTime.now().minusMinutes(1)
         if (weather == null) {
-            weather = weatherRepo.getNetworkWeather()
+            weather = weatherRepo.getNetworkWeather(getRequestParams())
             if (weather == null){
                 return null
             } else {
@@ -44,7 +61,7 @@ class WeatherManager @Inject constructor(
             }
         } else if (currentTime >= weather.date) {
             Log.d(TAG, "$currentTime, ${weather.date}")
-            weather = weatherRepo.getNetworkWeather()
+            weather = weatherRepo.getNetworkWeather(getRequestParams())
             weatherPrefs.setLastWeather(weather!!)
         }
         return weather
@@ -53,9 +70,9 @@ class WeatherManager @Inject constructor(
     suspend fun getForecast(): List<Forecast> {
         var forecasts: MutableList<Forecast> = forecastRoomListToForecastList(forecastRepository.getForecasts())
         val lastUpdateTime = weatherPrefs.getForecastUpdateTime()
-        val currentTime: LocalDateTime = LocalDateTime.now().minusMinutes(15)
+        val currentTime: LocalDateTime = LocalDateTime.now().minusMinutes(1)
         if (forecasts == emptyList<Forecast>()) {
-            forecasts = weatherRepo.getNetworkForecast()
+            forecasts = weatherRepo.getNetworkForecast(getRequestParams())
             if (forecasts == emptyList<Forecast>()) {
                 return forecasts
             }
@@ -64,7 +81,7 @@ class WeatherManager @Inject constructor(
             }
         } else if (currentTime >= lastUpdateTime) {
             Log.d(TAG, "$currentTime, $lastUpdateTime")
-            val newForecast = weatherRepo.getNetworkForecast()
+            val newForecast = weatherRepo.getNetworkForecast(getRequestParams())
             for (i in 0 until forecasts.size) {
                 loop@ for (y in newForecast) {
                     if (forecasts[i] == y) {

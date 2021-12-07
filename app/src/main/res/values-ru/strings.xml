@@ -8,4 +8,5 @@
     <string name="day">День</string>
     <string name="evening">Вечер</string>
     <string name="night">Ночь</string>
+    <string name="perm_denied">Отказано в доступе</string>
 </resources>

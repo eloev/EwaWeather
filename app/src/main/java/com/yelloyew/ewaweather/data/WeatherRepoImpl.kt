@@ -1,12 +1,11 @@
 package com.yelloyew.ewaweather.data
 
 import android.util.Log
-import com.yelloyew.ewaweather.data.database.ForecastRepository
-import com.yelloyew.ewaweather.data.database.model.ForecastRoom
 import com.yelloyew.ewaweather.data.network.ForecastService
 import com.yelloyew.ewaweather.data.network.WeatherService
 import com.yelloyew.ewaweather.domain.WeatherRepo
 import com.yelloyew.ewaweather.domain.model.Forecast
+import com.yelloyew.ewaweather.domain.model.RequestParams
 import com.yelloyew.ewaweather.domain.model.Weather
 import dagger.hilt.components.SingletonComponent
 import it.czerwinski.android.hilt.annotations.BoundTo
@@ -16,7 +15,6 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
 import javax.inject.Inject
-import javax.inject.Singleton
 import kotlin.math.roundToInt
 
 private const val TAG = "tag10 WeatherRepoImpl"
@@ -28,9 +26,16 @@ class WeatherRepoImpl @Inject constructor(
     private val weatherPrefs: WeatherPreferences
 ) : WeatherRepo {
 
-    override suspend fun getNetworkWeather(): Weather? {
+    override suspend fun getNetworkWeather(requestParams: RequestParams?): Weather? {
         try {
-            val response = weatherService.weatherNow()
+            val latitude : Double = requestParams!!.latitude
+            val longitude : Double = requestParams.longitude
+            val language : String = requestParams.language
+            val response = weatherService.weatherNow(
+                latitude = latitude,
+                longitude = longitude,
+                language = language
+            )
             return if (response.isSuccessful) {
                 Log.d(TAG, response.toString())
                 Weather(
@@ -53,10 +58,17 @@ class WeatherRepoImpl @Inject constructor(
         }
     }
 
-    override suspend fun getNetworkForecast(): MutableList<Forecast> {
+    override suspend fun getNetworkForecast(requestParams: RequestParams?): MutableList<Forecast> {
+        val latitude : Double = requestParams!!.latitude
+        val longitude : Double = requestParams.longitude
+        val language : String = requestParams.language
         val forecasts = mutableListOf<Forecast>()
         try {
-            val response = forecastService.weatherSevenDays()
+            val response = forecastService.weatherSevenDays(
+                latitude = latitude,
+                longitude = longitude,
+                language = language
+            )
             if (response.isSuccessful) {
                 Log.d(TAG, response.toString())
                 for ((i, _) in response.body()!!.forecasts.withIndex()) {

@@ -21,7 +21,7 @@ class AppWorker @AssistedInject constructor(
     override suspend fun doWork(): Result {
         with(weatherManager) {
             getWeather()
-            getForecast()
+            //getForecast()
         }
         Log.d(TAG, "worker update weather data")
         return Result.success()

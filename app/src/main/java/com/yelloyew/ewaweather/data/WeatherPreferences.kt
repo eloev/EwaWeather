@@ -1,8 +1,10 @@
 package com.yelloyew.ewaweather.data
 
 import android.content.Context
+import android.util.Log
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
+import com.yelloyew.ewaweather.domain.model.RequestParams
 import com.yelloyew.ewaweather.domain.model.Weather
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.lang.StringBuilder
@@ -12,6 +14,7 @@ import javax.inject.Inject
 
 private const val PREF_LAST_WEATHER = "lastWeather"
 private const val PREF_LAST_FORECAST_UPDATE = "lastForecastUpdate"
+private const val PREF_REQUEST_PARAMS = "requestParams"
 
 class WeatherPreferences @Inject constructor(
     @ApplicationContext private val context: Context
@@ -65,5 +68,34 @@ class WeatherPreferences @Inject constructor(
         val output = LocalDateTime.now().format(ISO_DATE_TIME)
         PreferenceManager.getDefaultSharedPreferences(context)
             .edit { putString(PREF_LAST_FORECAST_UPDATE, output.toString()) }
+    }
+
+    fun getRequestParams(): RequestParams? {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        val item = prefs.getString(PREF_REQUEST_PARAMS, "")!!
+        if (item.isNotBlank()){
+            val items = item.split(",")
+            Log.d("tag", items[1])
+            if (items.size == 3) {
+                return RequestParams(
+                    latitude = items[0].toDouble(),
+                    longitude = items[1].toDouble(),
+                    language = items[2]
+                )
+            }
+        }
+        return null
+    }
+
+    fun setRequestParams(requestParams: RequestParams) {
+        val output = StringBuilder()
+        with(requestParams) {
+            output.append("$latitude,")
+            output.append("$longitude,")
+            output.append("$language,")
+        }
+        PreferenceManager.getDefaultSharedPreferences(context)
+            .edit { putString(PREF_REQUEST_PARAMS, output.toString()) }
+    Log.d("tag", requestParams.toString())
     }
 }

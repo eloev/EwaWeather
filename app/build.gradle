@@ -83,4 +83,7 @@ dependencies {
     // Hilt extensions
     implementation("it.czerwinski.android.hilt:hilt-extensions:1.3.0-RC1")
     kapt("it.czerwinski.android.hilt:hilt-processor:1.3.0-RC1")
+
+    // GPlay location
+    implementation 'com.google.android.gms:play-services-location:18.0.0'
 }

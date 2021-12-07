@@ -9,8 +9,8 @@ interface WeatherService {
 
     @GET("weather?")
     suspend fun weatherNow(
-        @Query("lat") latitude : Float = 55.75f,
-        @Query("lon") longitude : Float = 37.61f,
+        @Query("lat") latitude : Double = 55.75,
+        @Query("lon") longitude : Double = 37.61,
         @Query("appid") api_key : String = "78c5d42c8f3f8fa663f0f461c1264e94",
         @Query("lang") language : String = "ru",
         @Query("mode") response_format : String = "json",

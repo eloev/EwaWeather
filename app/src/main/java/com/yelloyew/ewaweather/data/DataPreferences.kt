@@ -16,7 +16,7 @@ private const val PREF_LAST_WEATHER = "lastWeather"
 private const val PREF_LAST_FORECAST_UPDATE = "lastForecastUpdate"
 private const val PREF_REQUEST_PARAMS = "requestParams"
 
-class WeatherPreferences @Inject constructor(
+class DataPreferences @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
 

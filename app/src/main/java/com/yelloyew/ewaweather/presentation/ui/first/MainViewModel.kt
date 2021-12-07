@@ -27,12 +27,12 @@ class MainViewModel @Inject constructor(
         var coroutineCompleted = false
         viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
             while (!coroutineCompleted){
-                val weatherManager = weatherManager.getWeather()
-                coroutineCompleted = if (weatherManager == null) {
+                val newWeather = weatherManager.getWeather()
+                coroutineCompleted = if (newWeather == null) {
                     delay(5000L)
                     false
                 } else {
-                    weather.postValue(weatherManager!!)
+                    weather.postValue(newWeather!!)
                     true
                 }
             }

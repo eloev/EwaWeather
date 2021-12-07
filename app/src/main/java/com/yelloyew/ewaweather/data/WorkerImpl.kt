@@ -3,8 +3,7 @@ package com.yelloyew.ewaweather.data
 import android.content.Context
 import android.util.Log
 import androidx.hilt.work.HiltWorker
-import androidx.work.CoroutineWorker
-import androidx.work.WorkerParameters
+import androidx.work.*
 import com.yelloyew.ewaweather.domain.WeatherManager
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -21,7 +20,7 @@ class AppWorker @AssistedInject constructor(
     override suspend fun doWork(): Result {
         with(weatherManager) {
             getWeather()
-            //getForecast()
+            getForecast()
         }
         Log.d(TAG, "worker update weather data")
         return Result.success()

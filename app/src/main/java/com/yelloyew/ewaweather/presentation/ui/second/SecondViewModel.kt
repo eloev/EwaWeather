@@ -14,7 +14,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SecondViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
     private val weatherManager: WeatherManager
 ) : ViewModel() {
 
@@ -25,12 +24,12 @@ class SecondViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             forecasts.postValue(weatherManager.getForecast())
             while (!coroutineCompleted) {
-                val weatherManager = weatherManager.getForecast()
-                coroutineCompleted = if (weatherManager == emptyList<Forecast>()) {
+                val newWeather = weatherManager.getForecast()
+                coroutineCompleted = if (newWeather == emptyList<Forecast>()) {
                     delay(5000L)
                     false
                 } else {
-                    forecasts.postValue(weatherManager)
+                    forecasts.postValue(newWeather)
                     true
                 }
             }

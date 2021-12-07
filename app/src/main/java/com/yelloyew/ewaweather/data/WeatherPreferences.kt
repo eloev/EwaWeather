@@ -28,13 +28,15 @@ class WeatherPreferences @Inject constructor(
             // имеет такой вид и в таком же порядке собирается
             // Москва,-2.35,947.0,91.0,30-11-2021 19:31
             // city=Москва, temp=-2.35, pressure=974.0, humility=91.0, date=30-11-2021 19:31
-            if (items.size == 5) {
+            if (items.size == 7) {
                 return Weather(
-                    city = items[0],
-                    temperature = items[1],
-                    pressure = items[2],
-                    humility = items[3],
-                    date = LocalDateTime.parse(items[4])
+                    id = items[0].toInt(),
+                    description =  items[1],
+                    city = items[2],
+                    temperature = items[3],
+                    pressure = items[4],
+                    humility = items[5],
+                    date = LocalDateTime.parse(items[6])
                 )
             }
         }
@@ -44,6 +46,8 @@ class WeatherPreferences @Inject constructor(
     fun setLastWeather(weather: Weather) {
         val output = StringBuilder()
         with(weather) {
+            output.append("$id,")
+            output.append("$description,")
             output.append("$city,")
             output.append("$temperature,")
             output.append("$pressure,")

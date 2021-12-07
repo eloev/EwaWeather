@@ -86,4 +86,7 @@ dependencies {
 
     // GPlay location
     implementation 'com.google.android.gms:play-services-location:18.0.0'
+
+    //Lottie
+    implementation 'com.airbnb.android:lottie:3.3.0'
 }

@@ -8,9 +8,9 @@ import com.yelloyew.ewaweather.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.core.app.ActivityCompat
 import android.content.pm.PackageManager
+import android.view.Menu
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.core.view.isVisible
 import com.google.android.gms.location.LocationServices
 import com.yelloyew.ewaweather.R
 import com.yelloyew.ewaweather.domain.model.RequestParams
@@ -32,14 +32,11 @@ class MainActivity : AppCompatActivity() {
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         getLocation()
+    }
 
-        with(binding) {
-            geoImage.setOnClickListener {
-                getLocation()
-                geoProgress.isVisible = true
-            }
-        }
-
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_item, menu)
+        return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -47,6 +44,9 @@ class MainActivity : AppCompatActivity() {
             android.R.id.home -> {
                 onBackPressed()
                 return true
+            }
+            R.id.menu_item_geo -> {
+                getLocation()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -64,7 +64,6 @@ class MainActivity : AppCompatActivity() {
                 ) {
                     getLocation()
                 } else {
-                    binding.geoProgress.isVisible = false
                     Toast.makeText(this, getString(R.string.perm_denied), Toast.LENGTH_SHORT).show()
                 }
             }
@@ -91,7 +90,6 @@ class MainActivity : AppCompatActivity() {
         } else {
             val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
             fusedLocationClient.lastLocation.addOnSuccessListener(this) { location ->
-                binding.geoProgress.isVisible = false
                 if (location != null) {
                     val latitude = location.latitude
                     val longitude = location.longitude

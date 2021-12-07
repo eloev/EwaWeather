@@ -9,4 +9,6 @@
     <string name="evening">Вечер</string>
     <string name="night">Ночь</string>
     <string name="perm_denied">Отказано в доступе</string>
+    <string name="update_time">Время обновления:</string>
+    <string name="temp">Температура:</string>
 </resources>

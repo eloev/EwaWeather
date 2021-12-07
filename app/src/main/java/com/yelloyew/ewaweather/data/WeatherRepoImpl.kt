@@ -37,13 +37,15 @@ class WeatherRepoImpl @Inject constructor(
                 language = language
             )
             return if (response.isSuccessful) {
-                Log.d(TAG, response.toString())
+                Log.d(TAG, response.body().toString())
                 Weather(
-                    response.body()!!.name,
-                    response.body()!!.main["temp"]!!.roundToInt().toString(),
-                    response.body()!!.main["pressure"].toString(),
-                    response.body()!!.main["humidity"].toString(),
-                    LocalDateTime.ofInstant(
+                    id = response.body()!!.weather[0].id,
+                    description = response.body()!!.weather[0].description,
+                    city = response.body()!!.name,
+                    temperature = response.body()!!.main["temp"]!!.roundToInt().toString(),
+                    pressure = response.body()!!.main["pressure"].toString(),
+                    humility = response.body()!!.main["humidity"].toString(),
+                    date = LocalDateTime.ofInstant(
                         Instant.ofEpochSecond(response.body()!!.dt),
                         TimeZone.getDefault().toZoneId()
                     )

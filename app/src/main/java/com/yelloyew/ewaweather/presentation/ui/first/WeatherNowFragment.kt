@@ -36,28 +36,22 @@ class WeatherNowFragment : Fragment() {
 
         with(binding) {
             linearRoot.setOnClickListener {
+                viewModel.getWeatherNow()
                 lifecycleScope.launch {
-                    if (viewModel.canOpenForecast()){
+                    if (viewModel.canOpenForecast()) {
                         val action =
                             WeatherNowFragmentDirections.actionWeatherNowFragmentToWeatherNextDayFragment()
                         findNavController().navigate(action)
-                    }
-                    else {
+                    } else {
                         Toast.makeText(context, R.string.no_internet, Toast.LENGTH_SHORT).show()
                     }
                 }
-            }
-            refresh.isRefreshing = true
-            refresh.setOnRefreshListener {
-                refresh.isRefreshing = false
-                viewModel.getWeatherNow()
             }
         }
 
         viewModel.getWeatherNow().observe(
             viewLifecycleOwner, {
                 setDataToLayout(it)
-                binding.refresh.isRefreshing = false
             }
         )
 
@@ -65,13 +59,26 @@ class WeatherNowFragment : Fragment() {
     }
 
     private fun setDataToLayout(weather: Weather) {
-        with(binding){
-            with(weather){
-                cityTextview.text = city
-                temperatureTextview.text = ("t $temperature°С")
+        with(binding) {
+            with(weather) {
+                cityTextview.text = ("$city, $description")
+                temperatureTextview.text = (getString(R.string.temp) + " $temperature°С")
                 pressureTextview.text = (getString(R.string.pressure) + " " + pressure)
                 humidityTextview.text = (getString(R.string.humility) + " " + humility)
-                dateTextview.text = date.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))
+                dateTextview.text = (getString(R.string.update_time) + " " + date.format(
+                    DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")
+                ))
+                when (id){
+                    in 200..232 -> lottie.setAnimation("200-232.json")
+                    in 300..321 -> lottie.setAnimation("300-321.500-531.json")
+                    in 500..531 -> lottie.setAnimation("300-321.500-531.json")
+                    in 600..622 -> lottie.setAnimation("600-622.json")
+                    in 700..781 -> lottie.setAnimation("700-781.json")
+                    800 -> lottie.setAnimation("800.json")
+                    in 801..802 -> lottie.setAnimation("801-802.json")
+                    in 803..804 -> lottie.setAnimation("803-804.json")
+                }
+                lottie.playAnimation()
             }
         }
     }

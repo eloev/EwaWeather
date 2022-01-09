@@ -22,14 +22,10 @@ import java.util.*
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
-private const val DATABASE_NAME = "saved_forecasts"
-private const val TAG = "tag10 RepositoryImpl"
-
 @BoundTo(supertype = Repository::class, component = SingletonComponent::class)
 class RepositoryImpl @Inject constructor(
     private val weatherService: WeatherService,
     private val forecastService: ForecastService,
-    private val dataPreferences: DataPreferences,
     @ApplicationContext private val context: Context
 ) : Repository {
 
@@ -52,7 +48,6 @@ class RepositoryImpl @Inject constructor(
                 language = language
             )
             return if (response.isSuccessful) {
-                Log.d(TAG, response.body().toString())
                 Weather(
                     id = response.body()!!.weather[0].id,
                     description = response.body()!!.weather[0].description,
@@ -87,7 +82,6 @@ class RepositoryImpl @Inject constructor(
                 language = language
             )
             if (response.isSuccessful) {
-                Log.d(TAG, response.toString())
                 for ((i, _) in response.body()!!.forecasts.withIndex()) {
                     with(response.body()!!.forecasts[i]) {
                         val date =
@@ -119,8 +113,6 @@ class RepositoryImpl @Inject constructor(
                         )
                     }
                 }
-                dataPreferences.setForecastUpdateTime()
-                Log.d(TAG, "update time for forecast")
                 return forecasts
             } else {
                 Log.d(TAG, HttpException(response).toString())
@@ -201,5 +193,10 @@ class RepositoryImpl @Inject constructor(
             )
         }
         return forecasts
+    }
+
+    companion object{
+        private const val DATABASE_NAME = "saved_forecasts"
+        private const val TAG = "tag10 RepositoryImpl"
     }
 }

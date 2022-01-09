@@ -1,7 +1,6 @@
 package com.yelloyew.ewaweather.presentation.ui.second
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yelloyew.ewaweather.domain.WeatherManager

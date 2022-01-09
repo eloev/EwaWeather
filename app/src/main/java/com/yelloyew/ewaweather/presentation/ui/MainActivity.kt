@@ -17,8 +17,6 @@ import com.yelloyew.ewaweather.domain.model.RequestParams
 import com.yelloyew.ewaweather.presentation.ui.first.MainViewModel
 import java.util.*
 
-private const val LOCATION_REQUEST_CODE = 1000
-
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
@@ -90,6 +88,8 @@ class MainActivity : AppCompatActivity() {
         } else {
             val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
             fusedLocationClient.lastLocation.addOnSuccessListener(this) { location ->
+                // if system don't used location services, return null.
+                // Need to go in google maps or another app and get location.
                 if (location != null) {
                     val latitude = location.latitude
                     val longitude = location.longitude
@@ -100,4 +100,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    companion object {
+        private const val LOCATION_REQUEST_CODE = 1000
+    }
 }

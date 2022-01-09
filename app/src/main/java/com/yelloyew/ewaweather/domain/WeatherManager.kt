@@ -11,8 +11,6 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
 
-private const val TAG = "tag11"
-
 @Singleton
 class WeatherManager @Inject constructor(
     private val repository: Repository,
@@ -20,25 +18,22 @@ class WeatherManager @Inject constructor(
     private val scheduler: Scheduler
 ) {
 
-    private var stockRequestParams: RequestParams? =
-        dataPreferences.getRequestParams() ?: RequestParams(55.75, 37.61, "ru")
+    var requestParams: RequestParams
+        get() {
+            return dataPreferences.getRequestParams() ?: RequestParams(55.75, 37.61, "ru")
+        }
+        set(requestParams) {
+            dataPreferences.setRequestParams(requestParams)
+        }
 
     init {
-        setupWorker()
-    }
-
-    fun setRequestParams(requestParams: RequestParams) {
-        stockRequestParams = requestParams
-        dataPreferences.setRequestParams(requestParams)
-    }
-
-    private fun getRequestParams(): RequestParams? {
-        val requestParams = dataPreferences.getRequestParams()
-        return requestParams ?: stockRequestParams
+        CoroutineScope(Dispatchers.IO).launch {
+            setupWorker()
+        }
     }
 
     suspend fun getWeather(): Weather? {
-        var weather: Weather? = repository.getNetworkWeather(getRequestParams())
+        var weather: Weather? = repository.getNetworkWeather(requestParams)
         if (weather == null) {
             weather = dataPreferences.getLastWeather()
             if (weather == null) {
@@ -51,13 +46,12 @@ class WeatherManager @Inject constructor(
     }
 
     suspend fun getForecast(): List<Forecast> {
-        var forecasts: MutableList<Forecast> = repository.getNetworkForecast(getRequestParams())
+        var forecasts: MutableList<Forecast> = repository.getNetworkForecast(requestParams)
         if (forecasts == emptyList<Forecast>()) {
             forecasts = repository.getForecasts().toMutableList()
             if (forecasts == emptyList<Forecast>()) {
                 return forecasts
             }
-
         } else {
             val oldForecasts = repository.getForecasts().toMutableList()
             for (i in forecasts.indices) {
@@ -78,9 +72,7 @@ class WeatherManager @Inject constructor(
         return getForecast() != emptyList<Forecast>()
     }
 
-    private fun setupWorker() {
-        CoroutineScope(Dispatchers.IO).launch {
-            scheduler.startScheduler()
-        }
+    private suspend fun setupWorker() {
+        scheduler.startScheduler()
     }
 }

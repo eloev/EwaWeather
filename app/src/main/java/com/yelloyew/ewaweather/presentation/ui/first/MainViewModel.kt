@@ -45,6 +45,6 @@ class MainViewModel @Inject constructor(
     }
 
     fun setRequestParams(requestParams: RequestParams) {
-        weatherManager.setRequestParams(requestParams)
+        weatherManager.requestParams = requestParams
     }
 }
